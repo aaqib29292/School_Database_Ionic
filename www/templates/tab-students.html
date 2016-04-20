@@ -1,0 +1,12 @@
+<ion-view view-title="Students">
+  <ion-content>
+    <ion-list>
+      <ion-item class="" ng-repeat="students in st.studentResponse.students" type="item-text-wrap" ui-sref="tab.studentDetails({klass_id: students.klass_id, section_id: students.section_id, id: students.id})">
+        <a>
+          <h3>Roll.No: {{ students.roll_number }}</h3>
+          <h3>Name: {{ students.name }}</h3>
+        </a>
+      </ion-item>
+    </ion-list>
+  </ion-content>
+</ion-view>

@@ -1,0 +1,17 @@
+<ion-view view-title="Classes">
+  <ion-content>
+    <ion-list>
+      <ion-item ng-repeat="classes in cc.classResponse.klasses" class= "text-center" type="item-text-wrap" ui-sref= "tab.sections({id: classes.id})">
+        <div>
+            <h3><a>Class {{ classes.name }}</a></h3>
+        </div>
+        <ion-option-button class="button-calm" ng-click="cc.editClass(classes)">
+          Edit
+        </ion-option-button>
+        <ion-option-button class="button-assertive" ng-click="cc.deleteClass(classes)">
+          Delete
+        </ion-option-button>
+      </ion-item>
+    </ion-list>
+  </ion-content>
+</ion-view>

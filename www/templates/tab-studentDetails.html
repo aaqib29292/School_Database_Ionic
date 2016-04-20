@@ -1,0 +1,30 @@
+<ion-view view-title="Student Details">
+  <ion-content>
+    <div class="list card">
+
+      <div class="row">
+    <div class="col-20">
+      <h4><strong>Roll No :</strong></h4>
+      <h4><strong>House Name :</strong></h4>
+      <h4><strong>Name :</strong></h4>
+      <h4><strong>Father's Name :</strong></h4>
+      <h4><strong>Gender :</strong></h4>
+      <h4><strong>Email id :</strong></h4>
+      <h4><strong>Address :</strong></h4>
+      <h4><strong>Phone :</strong></h4>
+      <h4><strong>Date of Birth :</strong></h4>
+    </div>
+    <div class="col-50">
+      <h4>{{ sd.studentResponse.student.roll_number }}</h4>
+      <h4>{{ sd.studentResponse.student.house_name }}</h4>
+      <h4>{{ sd.studentResponse.student.name }}</h4>
+      <h4>{{ sd.studentResponse.student.fathers_name }}</h4>
+      <h4>{{ sd.studentResponse.student.gender }}</h4>
+      <h4>{{ sd.studentResponse.student.email }}</h4>
+      <h4>{{ sd.studentResponse.student.address }}</h4>
+      <h4>{{ sd.studentResponse.student.phone }}</h4>
+      <h4>{{ sd.studentResponse.student.dob }}</h4>
+    </div>
+  </div>
+  </ion-content>
+</ion-view>
