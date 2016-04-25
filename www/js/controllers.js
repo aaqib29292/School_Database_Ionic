@@ -26,7 +26,9 @@ function ClassesController($scope, $resource, classResource, $ionicModal, $ionic
     vm.classResponse = classResource.get();
     console.log("getClasses");
     console.log(vm.classResponse);
-  }();
+  };
+
+  vm.getClasses();
 
   $ionicModal.fromTemplateUrl('newModal.html', function($ionicModal) {
         $scope.modal = $ionicModal;
@@ -39,7 +41,10 @@ function ClassesController($scope, $resource, classResource, $ionicModal, $ionic
 
     vm.addClass = function(className){
       console.log(className);
-      classResource.save({name:className});
+      classResource.save({name:className}).$promise.then(function(result) {
+          console.log("Success");
+          vm.getClasses();
+      });
       vm.classResponse.klasses.push({name:className});
       // work on resetting the modal
       // $scope.modal.reset();
@@ -59,6 +64,7 @@ function ClassesController($scope, $resource, classResource, $ionicModal, $ionic
     console.log("Edit");
     $scope.modal2.show();
     vm.classes = classes;
+    $ionicListDelegate.closeOptionButtons()
   }
 
   vm.updateClass = function(classes, name) {
@@ -82,7 +88,9 @@ function SectionsController($scope, $resource, sectionResource, $ionicModal, $io
 
     vm.getSections = function() {
       vm.sectionResponse = sectionResource.get();
-    }();
+    };
+
+    vm.getSections();
 
     $ionicModal.fromTemplateUrl('newModal.html', function($ionicModal) {
           $scope.modal = $ionicModal;
@@ -93,14 +101,30 @@ function SectionsController($scope, $resource, sectionResource, $ionicModal, $io
           animation: 'slide-in-up'
       });
 
+    // vm.addSection = function(sectionName) {
+    //   console.log("Add");
+    //   sectionResource.save({name: sectionName});
+    //   vm.sectionResponse.sections.push({name:sectionName});
+    //   // work on resetting the modal
+    //   // $scope.modal.reset();
+    //   $scope.modal.hide();
+    //   // vm.getSections();
+    // }
+
     vm.addSection = function(sectionName) {
       console.log("Add");
-      sectionResource.save({name: sectionName});
-      vm.sectionResponse.sections.push({name:sectionName});
+      sectionResource.save({name: sectionName}).$promise.then(function(result) {
+        console.log("Success");
+        vm.getSections();
+    });
+      // vm.sectionResponse.sections.push({name:sectionName});
       // work on resetting the modal
       // $scope.modal.reset();
       $scope.modal.hide();
+      // vm.getSections();
     }
+
+
 
     $ionicModal.fromTemplateUrl('editModal.html', function($ionicModal) {
           $scope.modal2 = $ionicModal;
@@ -139,7 +163,9 @@ function SectionsController($scope, $resource, sectionResource, $ionicModal, $io
     vm.getStudents = function() {
       vm.studentResponse = studentResource.get();
       console.log(vm.studentResponse);
-    }();
+    };
+
+    vm.getStudents();
 
     $ionicModal.fromTemplateUrl('newModal.html', function($ionicModal) {
           $scope.modal = $ionicModal;
@@ -153,8 +179,11 @@ function SectionsController($scope, $resource, sectionResource, $ionicModal, $io
     vm.addStudent = function(name, rollnumber, fathername, gender, email, phone, dob, address, house) {
       console.log("Add");
       console.log(rollnumber);
-      studentResource.save({name: name, roll_number: rollnumber, fathers_name: fathername, gender: gender, email: email, phone: phone, dob: dob, address: address, house_id: house});
-      vm.studentResponse.students.push({name: name, roll_number: rollnumber, fathers_name: fathername, gender: gender, email: email, phone: phone, dob: dob, address: address, house_id: house});
+      studentResource.save({name: name, roll_number: rollnumber, fathers_name: fathername, gender: gender, email: email, phone: phone, dob: dob, address: address, house_id: house}).$promise.then(function(result) {
+          console.log("Success");
+          vm.getStudents();
+      });
+      // vm.studentResponse.students.push({name: name, roll_number: rollnumber, fathers_name: fathername, gender: gender, email: email, phone: phone, dob: dob, address: address, house_id: house})
       // work on resetting the modal
       // $scope.modal.reset();
       $scope.modal.hide();
@@ -164,7 +193,7 @@ function SectionsController($scope, $resource, sectionResource, $ionicModal, $io
 
 
 
-  function StudentDetailsController($scope, studentDetailsResource, $resource, $ionicModal, $ionicPopup,  $ionicListDelegate, $stateParams, $window) {
+  function StudentDetailsController($scope, studentDetailsResource, $resource, $ionicModal, $ionicPopup, $ionicHistory,  $ionicListDelegate, $stateParams, $window) {
     var vm = this;
 
     vm.getStudents = function() {
@@ -188,6 +217,7 @@ function SectionsController($scope, $resource, sectionResource, $ionicModal, $io
     }
 
     vm.updateStudent = function(student, name, rollnumber, fathername, gender, email, phone, dob, address, house) {
+      $scope.modal2.hide();
       studentDetailsResource.update({name: name, roll_number: rollnumber, fathers_name: fathername, gender: gender, email: email, phone: phone, dob: dob, address: address, house_id: house}, student);
       console.log("Update");
     }
@@ -198,11 +228,13 @@ function SectionsController($scope, $resource, sectionResource, $ionicModal, $io
        template: 'Are you sure you want to delete this student?'
      });
       console.log("delete");
-      console.log(student);
       confirmPopup.then(function(res) {
        if(res) {
         console.log("delete done");
-        studentDetailsResource.delete({name: student.name});
+        studentDetailsResource.delete({name: student.name}).$promise.then(function(result) {
+          console.log("Success");
+          $ionicHistory.goBack(-2);
+          });
         };
       });
 

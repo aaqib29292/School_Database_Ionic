@@ -3,7 +3,7 @@
     <div class="list card">
 
       <div class="row">
-    <div class="col-20">
+    <div class="col">
       <h4><strong>Roll No :</strong></h4>
       <h4><strong>House Name :</strong></h4>
       <h4><strong>Name :</strong></h4>
@@ -14,7 +14,7 @@
       <h4><strong>Phone :</strong></h4>
       <h4><strong>Date of Birth :</strong></h4>
     </div>
-    <div class="col-50">
+    <div class="col-60">
       <h4>{{ sd.studentResponse.student.roll_number }}</h4>
       <h4>{{ sd.studentResponse.student.house_name }}</h4>
       <h4>{{ sd.studentResponse.student.name }}</h4>
@@ -28,7 +28,7 @@
   </div>
   <button class="button button-balanced col" ng-click="sd.editStudent(sd.studentResponse.student)">
     Edit
-  </button>
+  </button><br>
   <button class="button button-assertive col" ng-click="sd.deleteStudent(sd.studentResponse.student)">
     Delete
   </button>
@@ -79,7 +79,7 @@
         <span class="input-label">Address</span>
         <input ng-model="sd.studentResponse.student.address" type="text">
       </label>
-      <button class="button button-full button-positive" ng-click="st.addStudent(name, rollnumber, fathername, gender, email, phone, dob, address, house)">Create</button>
+      <button class="button button-full button-positive" ng-click="sd.updateStudent(sd.student, name, rollnumber, fathername, gender, email, phone, dob, address, house)">Create</button>
     </div>
   </ion-content>
 </ion-modal-view>
