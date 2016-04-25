@@ -132,54 +132,80 @@ function SectionsController($scope, $resource, sectionResource, $ionicModal, $io
 
   }
 
-
-
-  function StudentsController(studentResource, $resource, $stateParams, $window) {
+  function StudentsController($scope, studentResource, $resource, $ionicModal, $ionicListDelegate, $stateParams, $window) {
     var vm = this;
+    console.log("StudentsController");
 
     vm.getStudents = function() {
       vm.studentResponse = studentResource.get();
+      console.log(vm.studentResponse);
     }();
+
+    $ionicModal.fromTemplateUrl('newModal.html', function($ionicModal) {
+          $scope.modal = $ionicModal;
+      }, {
+          // Use our scope for the scope of the modal to keep it simple
+          scope: $scope,
+          // The animation we want to use for the modal entrance
+          animation: 'slide-in-up'
+      });
 
     vm.addStudent = function(name, rollnumber, fathername, gender, email, phone, dob, address, house) {
       console.log("Add");
       console.log(rollnumber);
       studentResource.save({name: name, roll_number: rollnumber, fathers_name: fathername, gender: gender, email: email, phone: phone, dob: dob, address: address, house_id: house});
-      $window.location.href = '/';
+      vm.studentResponse.students.push({name: name, roll_number: rollnumber, fathers_name: fathername, gender: gender, email: email, phone: phone, dob: dob, address: address, house_id: house});
+      // work on resetting the modal
+      // $scope.modal.reset();
+      $scope.modal.hide();
     }
 
   }
 
 
 
-  function StudentDetailsController(studentDetailsResource, $resource, $stateParams, $window) {
+  function StudentDetailsController($scope, studentDetailsResource, $resource, $ionicModal, $ionicPopup,  $ionicListDelegate, $stateParams, $window) {
     var vm = this;
 
     vm.getStudents = function() {
       vm.studentResponse = studentDetailsResource.get();
       console.log(vm.studentResponse);
     }();
+
+    $ionicModal.fromTemplateUrl('editModal.html', function($ionicModal) {
+          $scope.modal2 = $ionicModal;
+      }, {
+          // Use our scope for the scope of the modal to keep it simple
+          scope: $scope,
+          // The animation we want to use for the modal entrance
+          animation: 'slide-in-up'
+      });
+
     vm.editStudent = function(student) {
       console.log("Edit");
+      $scope.modal2.show();
       vm.student = student;
-      $('#editModal').modal('show');
     }
 
     vm.updateStudent = function(student, name, rollnumber, fathername, gender, email, phone, dob, address, house) {
-      $('#editModal').modal('hide');
       studentDetailsResource.update({name: name, roll_number: rollnumber, fathers_name: fathername, gender: gender, email: email, phone: phone, dob: dob, address: address, house_id: house}, student);
       console.log("Update");
     }
 
     vm.deleteStudent = function(student) {
-      var del = confirm("Are you sure?");
+      var confirmPopup = $ionicPopup.confirm({
+       title: 'Delete Student?',
+       template: 'Are you sure you want to delete this student?'
+     });
       console.log("delete");
       console.log(student);
-      if (del == true)
-      {
+      confirmPopup.then(function(res) {
+       if(res) {
+        console.log("delete done");
         studentDetailsResource.delete({name: student.name});
-        $window.location.href = '/';
-      }
+        };
+      });
+
     }
 
   }

@@ -1,12 +1,91 @@
 <ion-view view-title="Students">
+  <ion-nav-buttons side="secondary">
+    <h1><button class="button ion-android-add-circle" ng-click="modal.show()"></button></h1>
+  </ion-nav-buttons>
   <ion-content>
     <ion-list>
-      <ion-item class="" ng-repeat="students in st.studentResponse.students" type="item-text-wrap" ui-sref="tab.studentDetails({klass_id: students.klass_id, section_id: students.section_id, id: students.id})">
-        <a>
-          <h3>Roll.No: {{ students.roll_number }}</h3>
-          <h3>Name: {{ students.name }}</h3>
-        </a>
+      <ion-item ng-repeat="students in st.studentResponse.students" type="item-text-wrap" ui-sref="tab.studentDetails({klass_id: students.klass_id, section_id: students.section_id, id: students.id})">
+        <div>
+          <h3><a>Roll.No: {{ students.roll_number }} <br>
+            Name: {{ students.name }}
+          </a></h3>
+        </div>
+        <ion-option-button class="button-calm" ui-sref="tab.studentDetails({klass_id: students.klass_id, section_id: students.section_id, id: students.id})">
+          Edit
+        </ion-option-button>
+        <ion-option-button class="button-assertive" ng-click="sd.deleteStudent(students)">
+          Delete
+        </ion-option-button>
       </ion-item>
     </ion-list>
   </ion-content>
 </ion-view>
+
+
+<script id="newModal.html" type="text/ng-template">
+  <ion-modal-view >
+    <ion-header-bar class="bar bar-header bar-positive">
+      <h1 class="title">New Student</h1>
+      <button class="button button-clear button-primary" ng-click="modal.hide()">Cancel</button>
+    </ion-header-bar>
+    <ion-content class="padding">
+      <div class="list">
+        <label for="rollnumber" class="item item-input">
+        <span class="input-label">Roll Number</span>
+        <input ng-model="rollnumber" type="text">
+        </label>
+        <label for="house" class="item item-input">
+          <span class="input-label">House Name</span>
+          <input ng-model="house" type="text">
+        </label>
+        <label for="name" class="item item-input">
+          <span class="input-label">Student Name</span>
+          <input ng-model="name" type="text">
+        </label>
+        <label for="fathername" class="item item-input">
+          <span class="input-label">Fathers Name</span>
+          <input ng-model="fathername" type="text">
+        </label>
+        <label for="gender" class="item item-input">
+          <span class="input-label">Gender</span>
+          <input ng-model="gender" type="text">
+        </label>
+        <label for="email" class="item item-input">
+          <span class="input-label">Email ID</span>
+          <input ng-model="email" type="text">
+        </label>
+        <label for="dob" class="item item-input">
+          <span class="input-label">Date of Birth</span>
+          <input type="date" ng-model="dob" type="text">
+        </label>
+        <label for="phone" class="item item-input">
+          <span class="input-label">Phone Number</span>
+          <input ng-model="phone" type="text">
+        </label>
+        <label for="address" class="item item-input">
+          <span class="input-label">Address</span>
+          <input ng-model="address" type="text">
+        </label>
+        <button class="button button-full button-positive" ng-click="st.addStudent(name, rollnumber, fathername, gender, email, phone, dob, address, house)">Create</button>
+      </div>
+    </ion-content>
+  </ion-modal-view>
+</script>
+
+<script id="editModal.html" type="text/ng-template">
+  <ion-modal-view >
+    <ion-header-bar class="bar bar-header bar-positive">
+      <h1 class="title">Update Student</h1>
+      <button class="button button-clear button-primary" ng-click="modal2.hide()">Cancel</button>
+    </ion-header-bar>
+    <ion-content class="padding">
+      <div class="list">
+        <label class="item item-input">
+          <span class="input-label">Student Name</span>
+          <input name="name" ng-model="sc.sections.name" type="text">
+        </label>
+        <button class="button button-full button-positive" ng-click="sc.updateSection(sc.sections,name)">Update</button>
+      </div>
+    </ion-content>
+  </ion-modal-view>
+</script>
