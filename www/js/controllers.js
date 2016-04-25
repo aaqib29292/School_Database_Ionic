@@ -10,24 +10,6 @@ angular.module('school.controllers', [])
 
 .controller('StudentDetailsController', StudentDetailsController)
 
-// .controller('klassesCtrl', function($scope, Chats) {
-//   // With the new view caching in Ionic, Controllers are only called
-//   // when they are recreated or on app start, instead of every page change.
-//   // To listen for when this page is active (for example, to refresh data),
-//   // listen for the $ionicView.enter event:
-//   //
-//   //$scope.$on('$ionicView.enter', function(e) {
-//   //});
-//
-//   $scope.chats = Chats.all();
-//   $scope.remove = function(chat) {
-//     Chats.remove(chat);
-//   };
-// })
-
-// .controller('sectionsCtrl', function($scope, $stateParams, Chats) {
-//   $scope.chat = Chats.get($stateParams.chatId);
-// })
 
 .controller('contactCtrl', function($scope) {
   $scope.settings = {
@@ -36,7 +18,7 @@ angular.module('school.controllers', [])
 });
 
 
-function ClassesController($scope, $resource, classResource, $ionicModal, $window) {
+function ClassesController($scope, $resource, classResource, $ionicModal, $ionicListDelegate, $window) {
   var vm = this;
   // var classResource = $resource('http://localhost:3000/api/v1/klasses/:classId');
   console.log("ClassesController");
@@ -46,7 +28,7 @@ function ClassesController($scope, $resource, classResource, $ionicModal, $windo
     console.log(vm.classResponse);
   }();
 
-  $ionicModal.fromTemplateUrl('modal.html', function($ionicModal) {
+  $ionicModal.fromTemplateUrl('newModal.html', function($ionicModal) {
         $scope.modal = $ionicModal;
     }, {
         // Use our scope for the scope of the modal to keep it simple
@@ -55,28 +37,35 @@ function ClassesController($scope, $resource, classResource, $ionicModal, $windo
         animation: 'slide-in-up'
     });
 
-    $scope.addClass = function(className){
+    vm.addClass = function(className){
       console.log(className);
       classResource.save({name:className});
+      vm.classResponse.klasses.push({name:className});
+      // work on resetting the modal
+      // $scope.modal.reset();
       $scope.modal.hide();
-      vm.classResponse.klasses.push({name:className})
     }
 
-  // vm.addClass = function(classname) {
-  //   console.log(classname);
-  //   classResource.save({name:classname});
-  //   $window.location.href = '/';
-  // }
+  $ionicModal.fromTemplateUrl('editModal.html', function($ionicModal) {
+        $scope.modal2 = $ionicModal;
+    }, {
+        // Use our scope for the scope of the modal to keep it simple
+        scope: $scope,
+        // The animation we want to use for the modal entrance
+        animation: 'slide-in-up'
+    });
 
   vm.editClass = function(classes) {
     console.log("Edit");
+    $scope.modal2.show();
     vm.classes = classes;
   }
 
   vm.updateClass = function(classes, name) {
-    $('#editClass').modal('hide');
+    $scope.modal2.hide();
     console.log("Update");
     classResource.update({classId: classes.id, name: name}, classes);
+    $ionicListDelegate.closeOptionButtons();
   }
 
   vm.deleteClass = function(classes) {
@@ -88,34 +77,57 @@ function ClassesController($scope, $resource, classResource, $ionicModal, $windo
 };
 
 
-function SectionsController(sectionResource, $resource, $stateParams, $window) {
+function SectionsController($scope, $resource, sectionResource, $ionicModal, $ionicListDelegate, $window) {
     var vm = this;
 
     vm.getSections = function() {
       vm.sectionResponse = sectionResource.get();
     }();
 
-    vm.addSection = function(name) {
+    $ionicModal.fromTemplateUrl('newModal.html', function($ionicModal) {
+          $scope.modal = $ionicModal;
+      }, {
+          // Use our scope for the scope of the modal to keep it simple
+          scope: $scope,
+          // The animation we want to use for the modal entrance
+          animation: 'slide-in-up'
+      });
+
+    vm.addSection = function(sectionName) {
       console.log("Add");
-      sectionResource.save({name: name});
-      $window.location.href = '/';
+      sectionResource.save({name: sectionName});
+      vm.sectionResponse.sections.push({name:sectionName});
+      // work on resetting the modal
+      // $scope.modal.reset();
+      $scope.modal.hide();
     }
+
+    $ionicModal.fromTemplateUrl('editModal.html', function($ionicModal) {
+          $scope.modal2 = $ionicModal;
+      }, {
+          // Use our scope for the scope of the modal to keep it simple
+          scope: $scope,
+          // The animation we want to use for the modal entrance
+          animation: 'slide-in-up'
+      });
 
     vm.editSection = function(sections) {
       console.log("Edit");
+      $scope.modal2.show();
       vm.sections = sections;
     }
 
     vm.updateSection = function(sections, name) {
-      $('#editSection').modal('hide');
+      $scope.modal2.hide();
       console.log("Update");
       sectionResource.update({sectionId: sections.id, name: name}, sections);
+      $ionicListDelegate.closeOptionButtons();
     }
 
     vm.deleteSection = function(sections) {
       console.log("delete");
       sectionResource.delete({classId: sections.klass_id, sectionId:sections.id, name:sections.name});
-      $window.location.href = '/';
+      vm.sectionResponse.sections.splice(vm.sectionResponse.sections.indexOf(sections), 1);
     }
 
   }

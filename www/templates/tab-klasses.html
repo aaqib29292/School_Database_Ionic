@@ -4,9 +4,9 @@
     </ion-nav-buttons>
   <ion-content>
     <ion-list>
-      <ion-item ng-repeat="classes in cc.classResponse.klasses" class= "text-center" type="item-text-wrap" ui-sref= "tab.sections({id: classes.id})">
+      <ion-item class= "text-center" ng-repeat="classes in cc.classResponse.klasses"  type="item-text-wrap" ui-sref= "tab.sections({id: classes.id})">
         <div>
-            <h3><a>Class {{ classes.name }}</a></h3>
+          <h3><a>Class {{ classes.name }}</a></h3>
         </div>
         <ion-option-button class="button-calm" ng-click="cc.editClass(classes)">
           Edit
@@ -19,10 +19,10 @@
   </ion-content>
 </ion-view>
 
-<script id="modal.html" type="text/ng-template">
+<script id="newModal.html" type="text/ng-template">
   <ion-modal-view >
     <ion-header-bar class="bar bar-header bar-positive">
-      <h1 class="title">New Contact</h1>
+      <h1 class="title">New Class</h1>
       <button class="button button-clear button-primary" ng-click="modal.hide()">Cancel</button>
     </ion-header-bar>
     <ion-content class="padding">
@@ -31,7 +31,25 @@
           <span class="input-label">Class Name</span>
           <input ng-model="className" type="text">
         </label>
-        <button class="button button-full button-positive" ng-click="addClass(className)">Create</button>
+        <button class="button button-full button-positive" ng-click="cc.addClass(className)">Create</button>
+      </div>
+    </ion-content>
+  </ion-modal-view>
+</script>
+
+<script id="editModal.html" type="text/ng-template">
+  <ion-modal-view >
+    <ion-header-bar class="bar bar-header bar-positive">
+      <h1 class="title">Update Class</h1>
+      <button class="button button-clear button-primary" ng-click="modal2.hide()">Cancel</button>
+    </ion-header-bar>
+    <ion-content class="padding">
+      <div class="list">
+        <label class="item item-input">
+          <span class="input-label">Class Name</span>
+          <input name="name" ng-model="cc.classes.name" type="text">
+        </label>
+        <button class="button button-full button-positive" ng-click="cc.updateClass(cc.classes,name)">Update</button>
       </div>
     </ion-content>
   </ion-modal-view>
