@@ -16,12 +16,10 @@
 <ion-view view-title="Sections">
   <ion-content>
     <ion-list>
-      <ion-item class="" ng-repeat="sections in sc.sectionResponse.sections" type="item-text-wrap">
-        <a ui-sref="tab.students({klass_id: sections.klass_id, id: sections.id})">
-          <h3>
-            {{ sections.name }}
-          </h3>
-        </a>
+      <ion-item class="text-center" ng-repeat="sections in sc.sectionResponse.sections" type="item-text-wrap" ui-sref="tab.students({klass_id: sections.klass_id, id: sections.id})">
+
+          <h3><a>Section {{ sections.name }}</a></h3>
+
       </ion-item>
     </ion-list>
   </ion-content>

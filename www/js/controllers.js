@@ -36,7 +36,7 @@ angular.module('school.controllers', [])
 });
 
 
-function ClassesController($resource, classResource, $window) {
+function ClassesController($scope, $resource, classResource, $ionicModal, $window) {
   var vm = this;
   // var classResource = $resource('http://localhost:3000/api/v1/klasses/:classId');
   console.log("ClassesController");
@@ -46,11 +46,27 @@ function ClassesController($resource, classResource, $window) {
     console.log(vm.classResponse);
   }();
 
-  vm.addClass = function(classname) {
-    console.log(classname);
-    classResource.save({name:classname});
-    $window.location.href = '/';
-  }
+  $ionicModal.fromTemplateUrl('modal.html', function($ionicModal) {
+        $scope.modal = $ionicModal;
+    }, {
+        // Use our scope for the scope of the modal to keep it simple
+        scope: $scope,
+        // The animation we want to use for the modal entrance
+        animation: 'slide-in-up'
+    });
+
+    $scope.addClass = function(className){
+      console.log(className);
+      classResource.save({name:className});
+      $scope.modal.hide();
+      vm.classResponse.klasses.push({name:className})
+    }
+
+  // vm.addClass = function(classname) {
+  //   console.log(classname);
+  //   classResource.save({name:classname});
+  //   $window.location.href = '/';
+  // }
 
   vm.editClass = function(classes) {
     console.log("Edit");
@@ -67,9 +83,7 @@ function ClassesController($resource, classResource, $window) {
     console.log("delete");
     console.log(classes);
     classResource.delete({classId:classes.id,name:classes.name});
-    // Need to add ajax action of deleting class
-    // vm.classResponse.klasses.remove(classes);
-    $window.location.href = '/';
+    vm.classResponse.klasses.splice(vm.classResponse.klasses.indexOf(classes), 1);
   }
 };
 

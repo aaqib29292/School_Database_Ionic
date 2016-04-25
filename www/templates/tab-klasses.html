@@ -1,4 +1,7 @@
-<ion-view view-title="Classes">
+<ion-view view-title="Classes" >
+  <ion-nav-buttons side="secondary">
+      <h1><button class="button ion-android-add-circle" ng-click="modal.show()"></button></h1>
+    </ion-nav-buttons>
   <ion-content>
     <ion-list>
       <ion-item ng-repeat="classes in cc.classResponse.klasses" class= "text-center" type="item-text-wrap" ui-sref= "tab.sections({id: classes.id})">
@@ -15,3 +18,21 @@
     </ion-list>
   </ion-content>
 </ion-view>
+
+<script id="modal.html" type="text/ng-template">
+  <ion-modal-view >
+    <ion-header-bar class="bar bar-header bar-positive">
+      <h1 class="title">New Contact</h1>
+      <button class="button button-clear button-primary" ng-click="modal.hide()">Cancel</button>
+    </ion-header-bar>
+    <ion-content class="padding">
+      <div class="list">
+        <label class="item item-input">
+          <span class="input-label">Class Name</span>
+          <input ng-model="className" type="text">
+        </label>
+        <button class="button button-full button-positive" ng-click="addClass(className)">Create</button>
+      </div>
+    </ion-content>
+  </ion-modal-view>
+</script>
