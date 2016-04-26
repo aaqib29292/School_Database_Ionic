@@ -13,7 +13,7 @@
         <ion-option-button class="button-calm" ui-sref="tab.studentDetails({klass_id: students.klass_id, section_id: students.section_id, id: students.id})">
           Edit
         </ion-option-button>
-        <ion-option-button class="button-assertive" ng-click="sd.deleteStudent(students)">
+        <ion-option-button class="button-assertive" ui-sref="tab.studentDetails({klass_id: students.klass_id, section_id: students.section_id, id: students.id})">
           Delete
         </ion-option-button>
       </ion-item>
@@ -26,48 +26,50 @@
   <ion-modal-view >
     <ion-header-bar class="bar bar-header bar-positive">
       <h1 class="title">New Student</h1>
-      <button class="button button-clear button-primary" ng-click="modal.hide()">Cancel</button>
+      <button class="button button-clear button-primary" ng-click="st.closeModal()">Cancel</button>
     </ion-header-bar>
     <ion-content class="padding">
-      <div class="list">
-        <label for="rollnumber" class="item item-input">
-        <span class="input-label">Roll Number</span>
-        <input ng-model="rollnumber" type="text">
-        </label>
-        <label for="house" class="item item-input">
-          <span class="input-label">House Name</span>
-          <input ng-model="house" type="text">
-        </label>
-        <label for="name" class="item item-input">
-          <span class="input-label">Student Name</span>
-          <input ng-model="name" type="text">
-        </label>
-        <label for="fathername" class="item item-input">
-          <span class="input-label">Fathers Name</span>
-          <input ng-model="fathername" type="text">
-        </label>
-        <label for="gender" class="item item-input">
-          <span class="input-label">Gender</span>
-          <input ng-model="gender" type="text">
-        </label>
-        <label for="email" class="item item-input">
-          <span class="input-label">Email ID</span>
-          <input ng-model="email" type="text">
-        </label>
-        <label for="dob" class="item item-input">
-          <span class="input-label">Date of Birth</span>
-          <input type="date" ng-model="dob" type="text">
-        </label>
-        <label for="phone" class="item item-input">
-          <span class="input-label">Phone Number</span>
-          <input ng-model="phone" type="text">
-        </label>
-        <label for="address" class="item item-input">
-          <span class="input-label">Address</span>
-          <input ng-model="address" type="text">
-        </label>
-        <button class="button button-full button-positive" ng-click="st.addStudent(name, rollnumber, fathername, gender, email, phone, dob, address, house)">Create</button>
-      </div>
+      <form name="newClass" id="newStudentForm" ng-submit="st.addStudent(name, rollnumber, fathername, gender, email, phone, dob, address, house)">
+        <div class="list">
+          <label for="rollnumber" class="item item-input">
+          <span class="input-label">Roll Number</span>
+          <input ng-model="rollnumber" type="text">
+          </label>
+          <label for="house" class="item item-input">
+            <span class="input-label">House Name</span>
+            <input ng-model="house" type="text">
+          </label>
+          <label for="name" class="item item-input">
+            <span class="input-label">Student Name</span>
+            <input ng-model="name" type="text">
+          </label>
+          <label for="fathername" class="item item-input">
+            <span class="input-label">Fathers Name</span>
+            <input ng-model="fathername" type="text">
+          </label>
+          <label for="gender" class="item item-input">
+            <span class="input-label">Gender</span>
+            <input ng-model="gender" type="text">
+          </label>
+          <label for="email" class="item item-input">
+            <span class="input-label">Email ID</span>
+            <input ng-model="email" type="text">
+          </label>
+          <label for="dob" class="item item-input">
+            <span class="input-label">Date of Birth</span>
+            <input type="date" ng-model="dob" type="text">
+          </label>
+          <label for="phone" class="item item-input">
+            <span class="input-label">Phone Number</span>
+            <input ng-model="phone" type="text">
+          </label>
+          <label for="address" class="item item-input">
+            <span class="input-label">Address</span>
+            <input ng-model="address" type="text">
+          </label>
+          <button class="button button-full button-positive" type="submit">Create</button>
+        </div>
+      </form>
     </ion-content>
   </ion-modal-view>
 </script>
