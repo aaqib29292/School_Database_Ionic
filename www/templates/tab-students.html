@@ -37,7 +37,13 @@
           </label>
           <label for="house" class="item item-input">
             <span class="input-label">House Name</span>
-            <input ng-model="house" type="text">
+            <select name="house" ng-model="house">
+              <option value="">Choose House</option>
+              <option value="1">Yellow</option>
+              <option value="2">Red</option>
+              <option value="3">Blue</option>
+              <option value="4">Green</option>
+            </select>
           </label>
           <label for="name" class="item item-input">
             <span class="input-label">Student Name</span>
@@ -49,7 +55,11 @@
           </label>
           <label for="gender" class="item item-input">
             <span class="input-label">Gender</span>
-            <input ng-model="gender" type="text">
+            <select name="gender" ng-model="gender">
+              <option value="">Choose Gender</option>
+              <option value="1">Male</option>
+              <option value="2">Famale</option>
+            </select>
           </label>
           <label for="email" class="item item-input">
             <span class="input-label">Email ID</span>

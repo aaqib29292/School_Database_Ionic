@@ -7,7 +7,8 @@
   "dependencies": {
     "bootstrap": "^3.3.6",
     "angular-resource": "^1.5.5",
-    "jquery": "^2.2.3"
+    "jquery": "^2.2.3",
+    "angular-input-date": "^1.0.4"
   },
   "resolutions": {
     "angular": ">= 1.0.8"

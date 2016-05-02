@@ -20,7 +20,7 @@
       <h4>{{ sd.studentResponse.student.name }}</h4>
       <h4>{{ sd.studentResponse.student.fathers_name }}</h4>
       <h4>{{ sd.studentResponse.student.gender }}</h4>
-      <h4>{{ sd.studentResponse.student.dob }}</h4>
+      <h4>{{ sd.studentResponse.student.dob | date: 'yyyy-MM-dd' }}</h4>
       <h4>{{ sd.studentResponse.student.email }}</h4>
       <h4>{{ sd.studentResponse.student.address }}</h4>
       <h4>{{ sd.studentResponse.student.phone }}</h4>
@@ -39,47 +39,52 @@
 <ion-modal-view >
   <ion-header-bar class="bar bar-header bar-positive">
     <h1 class="title">New Student</h1>
-    <button class="button button-clear button-primary" ng-click="modal2.hide()">Cancel</button>
+    <button class="button button-clear button-primary" ng-click="sd.cancelModal()">Cancel</button>
   </ion-header-bar>
   <ion-content class="padding">
     <div class="list">
       <label for="rollnumber" class="item item-input">
-      <span class="input-label">Roll Number</span>
-      <input ng-model="sd.studentResponse.student.roll_number" type="text">
+        <span class="input-label">Roll Number</span>
+        <input ng-model="sd.student.roll_number" type="text">
       </label>
       <label for="house" class="item item-input">
         <span class="input-label">House Name</span>
-        <input ng-model="sd.studentResponse.student.house_name" type="text">
+        <select
+            ng-options="house.name for house in sd.houses" ng-model="sd.student.house_id">
+        </select>
       </label>
       <label for="name" class="item item-input">
         <span class="input-label">Student Name</span>
-        <input ng-model="sd.studentResponse.student.name" type="text">
+        <input ng-model="sd.student.name" type="text">
       </label>
       <label for="fathername" class="item item-input">
         <span class="input-label">Fathers Name</span>
-        <input ng-model="sd.studentResponse.student.fathers_name" type="text">
+        <input ng-model="sd.student.fathers_name" type="text">
       </label>
       <label for="gender" class="item item-input">
         <span class="input-label">Gender</span>
-        <input ng-model="sd.studentResponse.student.gender" type="text">
+        <select
+            ng-options="gender.code for gender in sd.genders"
+            ng-model="sd.student.gender_id">
+        </select>
       </label>
       <label for="email" class="item item-input">
         <span class="input-label">Email ID</span>
-        <input ng-model="sd.studentResponse.student.email" type="text">
+        <input ng-model="sd.student.email" type="text">
       </label>
       <label for="dob" class="item item-input">
         <span class="input-label">Date of Birth</span>
-        <input type="text" ng-model="sd.studentResponse.student.dob">
+        <input type="date" ng-model="sd.student.dob">
       </label>
       <label for="phone" class="item item-input">
         <span class="input-label">Phone Number</span>
-        <input ng-model="sd.studentResponse.student.phone" type="text">
+        <input ng-model="sd.student.phone" type="text">
       </label>
       <label for="address" class="item item-input">
         <span class="input-label">Address</span>
-        <input ng-model="sd.studentResponse.student.address" type="text">
+        <input ng-model="sd.student.address" type="text">
       </label>
-      <button class="button button-full button-positive" ng-click="sd.updateStudent(sd.student, name, rollnumber, fathername, gender, email, phone, dob, address, house)">Create</button>
+      <button class="button button-full button-positive" ng-click="sd.updateStudent(sd.student)">Create</button>
     </div>
   </ion-content>
 </ion-modal-view>
