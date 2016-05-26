@@ -11,20 +11,15 @@ angular.module('school.controllers', [])
 .controller('StudentDetailsController', StudentDetailsController)
 
 
-function ClassesController($scope, $resource, $ionicModal, $ionicPopup, $ionicListDelegate, $window) {
+function ClassesController($scope, $resource, $ionicModal, $ionicPopup, $ionicListDelegate, $window, classResource) {
   var vm = this;
-
-  var classResource = $resource('http://localhost:3000/api/v1/klasses/:classId?access_token=TLVMLZCHEBSBAVTQJDV5LVTB7E8S74Q4');
-
-  // var classResource = $resource('https://school-db-rails.herokuapp.com/api/v1/klasses/:classId');
-
 
   console.log("ClassesController");
 
   vm.getClasses = function() {
-    vm.classResponse = classResource.get();
-    console.log("getClasses");
-    console.log(vm.classResponse);
+    vm.classResponse = classResource.get(function() {
+      console.log(vm.classResponse);
+    });
   };
 
   vm.getClasses();
@@ -38,23 +33,23 @@ function ClassesController($scope, $resource, $ionicModal, $ionicPopup, $ionicLi
         animation: 'slide-in-up'
     });
 
-
     vm.addClass = function(className){
       console.log(className);
-      classResource.save({name:className}).$promise.then(function(result) {
-          console.log("Success");
-          vm.getClasses();
+      vm.addClass = new classResource();
+      vm.addClass.name = className;
+      vm.addClass.$save(function(){
+        vm.getClasses();
       });
-      // vm.classResponse.klasses.push({name:className});
-      // work on resetting the modal
-      // $scope.modal.reset();
       $scope.modal.hide();
-      $("form#newClassForm")[0].reset();
-    }
+      // console.log(vclassName);
+      // $scope.className="";
+    };
 
     vm.closeModal = function(){
+      console.log("className = " +  $scope.className);
       $scope.modal.hide();
-      $("form#newClassForm")[0].reset();
+      $scope.className = "";
+      // $("form#newClassForm")[0].reset();
     }
 
   $ionicModal.fromTemplateUrl('editModal.html', function($ionicModal) {
@@ -66,19 +61,42 @@ function ClassesController($scope, $resource, $ionicModal, $ionicPopup, $ionicLi
         animation: 'slide-in-up'
     });
 
-  vm.editClass = function(classes) {
-    console.log("Edit");
-    $scope.modal2.show();
-    vm.classes = classes;
-    $ionicListDelegate.closeOptionButtons()
-  }
+    vm.editClass = function(classes) {
+      console.log("Edit");
+      $scope.modal2.show();
+      vm.classes = classes;
+      $ionicListDelegate.closeOptionButtons()
+    }
 
-  vm.updateClass = function(classes, name) {
-    $scope.modal2.hide();
+  // vm.editClass = function(classes) {
+  //   console.log("Edit");
+  //   $scope.modal2.show();
+  //   vm.classes = classes;
+  //   $ionicListDelegate.closeOptionButtons()
+  // }
+
+  vm.updateClass = function(classes) {
+    console.log("classid = " + classes.id);
+    vm.classResponse = classResource.get({classId: classes.id}, function() {
+      console.log(vm.classes.name);
+      vm.classResponse.name = vm.classes.name;
+      console.log(vm.classResponse);
+      $scope.modal2.hide();
+      vm.classResponse.$update({classId: classes.id},function(){
+        vm.getClasses();
+      });
+    });
     console.log("Update");
-    classResource.update({classId: classes.id, name: name}, classes);
+    // classResource.update({classId: classes.id, name: name}, classes);
     $ionicListDelegate.closeOptionButtons();
   }
+
+  // vm.updateClass = function(classes, name) {
+  //   $scope.modal2.hide();
+  //   console.log("Update");
+  //   classResource.update({classId: classes.id, name: name}, classes);
+  //   $ionicListDelegate.closeOptionButtons();
+  // }
 
   vm.deleteClass = function(classes) {
     console.log("delete");
@@ -92,13 +110,42 @@ function ClassesController($scope, $resource, $ionicModal, $ionicPopup, $ionicLi
 
     confirmPopup.then(function(res) {
      if(res) {
-      console.log("delete done");
-      classResource.delete({classId:classes.id,name:classes.name});
-      vm.classResponse.klasses.splice(vm.classResponse.klasses.indexOf(classes), 1);
+      vm.classResponse = classResource.get({classId: classes.id}, function() {
+        console.log(classes.id);
+        console.log(vm.classResponse);
+        vm.classResponse.$delete({classId: classes.id, name: classes.name}, function() {
+          //gone forever!
+          console.log("delete done");
+          vm.getClasses();
+        });
+      });
+      // classResource.delete({classId:classes.id,name:classes.name});
+      // Handle a promise and on success delete the object from the class Array
+      // vm.classResponse.klasses.splice(vm.classResponse.klasses.indexOf(classes), 1);
       }
     });
-
   }
+
+  // vm.deleteClass = function(classes) {
+  //   console.log("delete");
+  //   console.log(classes);
+  //
+  //
+  //   var confirmPopup = $ionicPopup.confirm({
+  //    title: 'Delete Class?',
+  //    template: 'Are you sure you want to delete this class?'
+  //    });
+  //
+  //   confirmPopup.then(function(res) {
+  //    if(res) {
+  //     console.log("delete done");
+  //     classResource.delete({classId:classes.id,name:classes.name});
+  //     // Handle a promise and on success delete the object from the class Array
+  //     vm.classResponse.klasses.splice(vm.classResponse.klasses.indexOf(classes), 1);
+  //     }
+  //   });
+  //
+  // }
 };
 
 
@@ -107,9 +154,9 @@ function SectionsController($scope, $stateParams, $resource, $ionicModal, $ionic
 
     var classId = $stateParams.id;
 
-    var sectionResource = $resource('http://localhost:3000/api/v1/klasses/:classId/sections/:sectionId?access_token=TLVMLZCHEBSBAVTQJDV5LVTB7E8S74Q4', {classId: classId}, { 'update': {method: "PUT"}});
+    // var sectionResource = $resource('http://localhost:3000/api/v1/klasses/:classId/sections/:sectionId?access_token=TLVMLZCHEBSBAVTQJDV5LVTB7E8S74Q4', {classId: classId}, { 'update': {method: "PUT"}});
 
-    // var sectionResource = $resource('https://school-db-rails.herokuapp.com/api/v1/klasses/:classId/sections/:sectionId', {classId: classId}, { 'update': {method: "PUT"}});
+    var sectionResource = $resource('https://school-db-rails.herokuapp.com/api/v1/klasses/:classId/sections/:sectionId', {classId: classId}, { 'update': {method: "PUT"}});
 
 
     vm.getSections = function() {
@@ -200,9 +247,9 @@ function SectionsController($scope, $stateParams, $resource, $ionicModal, $ionic
     var classId = $stateParams.klass_id;
     var sectionId = $stateParams.id;
 
-    var studentResource = $resource('http://localhost:3000/api/v1/klasses/:classId/sections/:sectionId/students/:studentId?access_token=TLVMLZCHEBSBAVTQJDV5LVTB7E8S74Q4',{classId:  classId, sectionId: sectionId}, { 'update': {method: "PUT"}});
+    // var studentResource = $resource('http://localhost:3000/api/v1/klasses/:classId/sections/:sectionId/students/:studentId?access_token=TLVMLZCHEBSBAVTQJDV5LVTB7E8S74Q4',{classId:  classId, sectionId: sectionId}, { 'update': {method: "PUT"}});
 
-    // var studentResource = $resource('https://school-db-rails.herokuapp.com/api/v1/klasses/:classId/sections/:sectionId/students/:studentId',{classId:  classId, sectionId: sectionId}, { 'update': {method: "PUT"}});
+    var studentResource = $resource('https://school-db-rails.herokuapp.com/api/v1/klasses/:classId/sections/:sectionId/students/:studentId',{classId:  classId, sectionId: sectionId}, { 'update': {method: "PUT"}});
 
 
     console.log("StudentsController");
@@ -252,9 +299,9 @@ function SectionsController($scope, $stateParams, $resource, $ionicModal, $ionic
     var sectionId = $stateParams.section_id;
     var studentId = $stateParams.id;
 
-    var studentDetailsResource = $resource('http://localhost:3000/api/v1/klasses/:classId/sections/:sectionId/students/:studentId?access_token=TLVMLZCHEBSBAVTQJDV5LVTB7E8S74Q4',{classId:  classId, sectionId: sectionId, studentId: studentId}, { 'update': {method: "PUT"}});
+    // var studentDetailsResource = $resource('http://localhost:3000/api/v1/klasses/:classId/sections/:sectionId/students/:studentId?access_token=TLVMLZCHEBSBAVTQJDV5LVTB7E8S74Q4',{classId:  classId, sectionId: sectionId, studentId: studentId}, { 'update': {method: "PUT"}});
 
-    // var studentDetailsResource = $resource('https://school-db-rails.herokuapp.com/api/v1/klasses/:classId/sections/:sectionId/students/:studentId', {classId:  classId, sectionId: sectionId, studentId: studentId}, { 'update': {method: "PUT"}});
+    var studentDetailsResource = $resource('https://school-db-rails.herokuapp.com/api/v1/klasses/:classId/sections/:sectionId/students/:studentId', {classId:  classId, sectionId: sectionId, studentId: studentId}, { 'update': {method: "PUT"}});
 
 
     vm.getStudents = function() {

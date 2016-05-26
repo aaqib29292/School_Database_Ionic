@@ -1,4 +1,15 @@
-// angular.module('school.services', [])
+angular.module('school.services',[])
+
+.factory('classResource', function($resource, $stateParams) {
+        return $resource('https://school-db-rails.herokuapp.com/api/v1/klasses/:classId',
+       {classId: '@classId'}, { 'update': {method: "PUT"}}); // Note the full endpoint address
+  })
+
+// .factory('classResource', function($resource, $stateParams) {
+//         return $resource('http://localhost:3000/api/v1/klasses/:classId?access_token=TLVMLZCHEBSBAVTQJDV5LVTB7E8S74Q4',
+//        {classId: '@classId'}, { 'update': {method: "PUT"}}); // Note the full endpoint address
+//   });
+
 //
 // .factory('classResource', function($resource) {
 //         return $resource('http://localhost:3000/api/v1/klasses/:classId?',

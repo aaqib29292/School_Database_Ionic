@@ -11,6 +11,13 @@ var paths = {
   sass: ['./scss/**/*.scss']
 };
 
+var ghPages = require('gulp-gh-pages');
+
+gulp.task('deploy', function() {
+  return gulp.src('./dist/**/*')
+    .pipe(ghPages());
+});
+
 gulp.task('default', ['sass']);
 
 gulp.task('sass', function(done) {
